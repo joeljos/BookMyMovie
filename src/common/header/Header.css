@@ -6,7 +6,6 @@
     padding-right: 32px;
     padding-left: 16px;
     display: flex;
-    align-items:center;
 }
 
 .svgImage{
@@ -26,4 +25,13 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.bookshowDiv{
+    position: absolute;
+    margin-left: 87%;
+}
+.loginlogoutDiv{
+    margin-left: 94%;
+    position: absolute;
 }
