@@ -9,7 +9,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { Link } from "react-router-dom";
 
@@ -290,13 +289,13 @@ const BookShow = (props) => {
             </Typography>
             <br />
             <br />
-            <Button
+           {/*} <Button
               variant="contained"
               onClick={bookShowButtonHandler}
               color="primary"
-            >
+                >
               BOOK SHOW
-            </Button>
+            </Button>*/}
           </CardContent>
         </Card>
       </div>

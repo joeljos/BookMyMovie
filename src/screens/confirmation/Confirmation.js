@@ -5,13 +5,12 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import green from "@material-ui/core/colors/green";
@@ -198,13 +197,13 @@ const Confirmation = (props) => {
                   </FormControl>
                 </div>
                 <div className="marginApply">
-                  <Button
+              {/*<Button
                     variant="contained"
                     onClick={couponApplyHandler}
                     color="primary"
                   >
                     Apply
-                  </Button>
+              </Button>*/}
                 </div>
               </div>
               <br />
@@ -218,13 +217,13 @@ const Confirmation = (props) => {
               </div>
               <br />
 
-              <Button
+              {/*<Button
                 variant="contained"
                 onClick={confirmBookingHandler}
                 color="primary"
               >
                 Confirm Booking
-              </Button>
+              </Button> */}
             </CardContent>
           </Card>
         </div>
