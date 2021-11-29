@@ -1,0 +1,8 @@
+                   onClick={(e)=>{
+                      genre.forEach((gen)=>{
+                        genreChecked[gen]=false
+                      })
+                      setChecked(genreChecked)
+                      }
+                      
+                    }

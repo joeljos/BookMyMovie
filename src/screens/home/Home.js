@@ -13,7 +13,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { MenuItem, Select, FormControl, InputLabel, Input } from '@material-ui/core';
+import { FormControlLabel, Checkbox, MenuItem, Select, FormGroup, FormControl, InputLabel, Input, Menu } from '@material-ui/core';
 
 
 let sampleUpcomingMovies = [
@@ -34,10 +34,14 @@ async function getData() {
 }
 
 function Home() {
-  let [itemData1, setitemData1] = useState(sampleUpcomingMovies);
-  let [itemData2, setitemData2] = useState(sampleReleasedMovies);
+  let [upcomingMovies, setUpcomingMovies] = useState(sampleUpcomingMovies);
+  let [releasedMovies, setReleasedMovies] = useState(sampleReleasedMovies);
   let [dbdata,setDbdata] = useState(false)
-  const [genre, setGenre] = useState('');
+  let [checked,setChecked] = useState({})
+  const [genre, setGenre] = useState([]);
+  let genreSelected = []
+  var genrelist, tempGenre = []
+  let genreChecked = {}
 
   const theme = useTheme();
   const useStyles1 = makeStyles((theme) => ({
@@ -103,10 +107,21 @@ function Home() {
     getData().then(()=>{setDbdata(newVar?newVar:false)})
   },[])
 
+  useEffect(()=>{
+    releasedMovies.map((item) => {
+      genrelist.push(...item.genres)
+    })
+    genrelist = [...new Set (genrelist)]
+    setGenre(genrelist)
+    genrelist.forEach(element =>(
+      genreChecked[element] = false
+    ))
+    setChecked(genreChecked)
+  },[dbdata])
+
   if (dbdata) {
 
     let movieData = dbdata.movies
-    console.log("moviedata",movieData)
     movieData.forEach((item) => {
       if (item.status == "PUBLISHED") {
         sampleUpcomingMovies.push(item)
@@ -115,10 +130,13 @@ function Home() {
         sampleReleasedMovies.push(item)
       }
     })
+
     
-    const handleChange = (event) => {
-      setGenre(event.target.value);
-    };
+    let handleCheckbox = (event)=>{
+console.log("closed menu",event.target.value)
+    }
+
+    genrelist = [...genre]
 
     return (
       <div>
@@ -131,7 +149,7 @@ function Home() {
         <div className="upcomingmoviegridDiv">
           <div className={classes1.root}>
             <ImageList rowHeight={250} className={classes1.imageList} cols={6}>
-              {itemData1.map((item) => (
+              {upcomingMovies.map((item) => (
                 <ImageListItem key={item.poster_url}>
                   <img src={item.poster_url} alt={item.title} />
                   <ImageListItemBar
@@ -150,7 +168,7 @@ function Home() {
           <div className="releasedmoviegridDiv">
             <div className={classes2.root}>
               <ImageList rowHeight={350} className={classes2.imageList} cols={4} gap={20}>
-                {itemData2.map((item) => (
+                {releasedMovies.map((item) => (
                   <ImageListItem key={item.poster_url}>
                     <img className={classes2.imageListItem} src={item.poster_url} alt={item.title} />
                     <ImageListItemBar
@@ -166,32 +184,62 @@ function Home() {
             </div>
           </div>
           <div className="moviefilterDiv">
-
             <Card variant="outlined" className={classes3.root}>
               <CardContent className={classes3.elements}>
                 <Typography className={classes3.title}>
                   FIND MOVIES BY:
                 </Typography>
+                <FormGroup aria-label="position">
                 <FormControl>
                   <InputLabel htmlFor="movie-name">Movie Name</InputLabel>
                   <Input id="movie-name" aria-describedby="movie-name" />
                 </FormControl>
+                <FormGroup>
                 <FormControl>
                   <InputLabel htmlFor="genres">Genres</InputLabel>
-                  <Select
+                 <Select
+                 multiple={true}
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={genre}
-                    onChange={handleChange}
-                    label="Age"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
+                    label="genres"
+                    value = {genre}
+                    input={<Input />}
+                   renderValue={(selected) => genreSelected.join()} >
+                    
+               {
+               genrelist.map(element => (
+                    <MenuItem>
+                    <FormControlLabel control={
+                    <Checkbox
+                    onChange={(e)=>{
+                      genreChecked[element] = e.target.checked
+                      setChecked(genreChecked)
+                      console.log("log",checked)
+                      console.log("target",e.target.checked,element)
+                      if(e.target.checked) {
+                        console.log('added element',checked)
+                        genreSelected.push(element)
+                        console.log("genreSelected",genreSelected)
+                      }
+                      else {
+                        console.log("need to remove element", element)
+                        const index = genreSelected.indexOf(element);
+                        if (index > -1) {
+                          genreSelected.splice(index, 1);
+                          console.log("genreSelected",genreSelected)
+                        }
+                      }
+                      } 
+                    }
+                    name = {element}
+                    />} label={element} />
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
+               ))            
+               }
+               </Select>
+                  </FormControl>
+                  </FormGroup>
+                  <FormControl>
                   <Input id="genres" aria-describedby="genres" />
                 </FormControl>
                 <FormControl>
@@ -206,6 +254,7 @@ function Home() {
                   <InputLabel htmlFor="release-date-end">Release Date End</InputLabel>
                   <Input id="release-date-end" aria-describedby="release-date-end" />
                 </FormControl>
+                </FormGroup>
               </CardContent>
               <CardActions className={classes3.elements}>
                 <Button className={classes3.elements} variant="contained" color="primary" >APPLY</Button>
